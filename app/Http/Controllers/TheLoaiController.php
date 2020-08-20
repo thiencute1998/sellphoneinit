@@ -29,12 +29,13 @@ class TheLoaiController extends Controller
 	    // 		'ten.min'=>'Tên thể loại phải có độ dài từ 3 đến 100 kí tự',
 	    // 		'ten.max'=>'Tên thể loại phải có độ dài từ 3 đến 100 kí tự',
 	    // ]);
-
+ // $theloai->tenkhongdau = str_slug($request->ten,' ');
+  // $theloai->trangthai = $request->rdoTrangThai;
 	    $theloai = new TheLoai;
 	    $theloai->ten = $request->ten;
-	    // $theloai->tenkhongdau = str_slug($request->ten,' ');
+
 	    $theloai->ghichu = $request->ghichu;
-	    // $theloai->trangthai = $request->rdoTrangThai;
+
             $file = $request->file;
 
             $hinh = str_random(4)."_".$file->getClientOriginalExtension();

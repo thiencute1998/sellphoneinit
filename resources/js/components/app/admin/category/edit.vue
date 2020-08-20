@@ -8,10 +8,10 @@
                   </h1>
               </div>
               <div class="col-lg-7" style="padding-bottom:120px">
-                  <form @submit.prevent="editCategory" method="POST" enctype="multipart/form-data">
+                  <form @submit.prevent="editCategory" enctype="multipart/form-data">
                       <div class="form-group">
                           <label>Tên thể loại</label>
-                          <input class="form-control" v-model="ten" placeholder="Nhập tên thể loại" />
+                          <input class="form-control" v-model="getCate.Ten" placeholder="Nhập tên thể loại" />
                       </div>
                       <div class="form-group">
                           <label>Chon hình ảnh</label>
@@ -19,16 +19,7 @@
                       </div>
                       <div class="form-group">
                           <label>Ghi chú</label>
-                          <input class="form-control" v-model="ghichu" placeholder="Nhập ghi chú" />
-                      </div>
-                      <div class="form-group">
-                          <label>Trạng thái</label>
-                          <label class="radio-inline">
-                              <input v-model="rdoTrangThai" value="1" checked="" type="radio">Còn
-                          </label>
-                          <label class="radio-inline">
-                              <input v-model="rdoTrangThai" value="0" type="radio">Hết
-                          </label>
+                          <input class="form-control" v-model="getCate.ghichu" placeholder="Nhập ghi chú" />
                       </div>
                       <button type="submit" class="btn btn-success">Sửa</button>
                       <button type="reset" class="btn btn-default">Làm mới</button>
@@ -41,51 +32,63 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 export default {
   data(){
     return {
-      ten : '',
       hinhanh : '',
-      ghichu : '',
-      rdoTrangThai : '',
     }
   },
+  beforeCreate(){
+    console.log("Before created");
+    this.$Progress.start();
+  },
   created(){
-    console.log("Created : "+document.querySelector('.container-hihi'));
-      axios.get('http://127.0.0.1:8000/api/admin/category/'+this.$route.params.id+'/find')
-      .then(response=>{
-        console.log(response.data);
-        this.ten = response.data.Ten;
-        this.ghichu = response.data.ghichu;
+    var idCate = this.$route.params.id;
+    this.$store.dispatch('cate/findCate',idCate);
 
-      })
+  },
+  computed: {
+    ...mapGetters('cate',['getCate']),
+
   },
   mounted(){
-    console.log("Mounted : "+document.querySelector('.container-hihi'));
+    this.$Progress.finish();
   },
   methods : {
+      // ...mapActions('cate',['editCate']),
     fileChange(e){
-      console.log(e.target.files[0]);
       this.hinhanh = e.target.files[0];
     },
     editCategory(){
-      let currentObj = this;
+        this.$Progress.start();
       const config = {
           headers: { 'content-type': 'multipart/form-data' }
       }
-      let formData = new FormData();
+      var formData = new FormData();``
       formData.append('file', this.hinhanh);
-      formData.append('ten',this.ten);
-      formData.append('ghichu',this.ghichu);
-      axios.post('http://127.0.0.1:8000/api/admin/category/'+this.$route.params.id+'/edit',formData,config)
-      .then(response=>{
-        console.log(response.data);
-        this.$router.push('/admin/category/list');
+      formData.append('ten',this.getCate.Ten);
+      formData.append('ghichu',this.getCate.ghichu);
+        var idCate = this.$route.params.id;
+        var _this = this;
+      this.$store.dispatch('cate/editCate',{
+          idCate : idCate,
+          formData : formData,
+          config : config
+      }).then(result=>{
+          setTimeout(function(){
+              _this.$Progress.finish();
+              _this.$router.push('/admin/category/list');
+          }, 1000);
+      }).catch(e=>{
+          console.log("Error happened : "+e);
       })
-      .catch(e=>{
-        console.log(e);
-      })
-    }
+        // this.editCate(this.$route.params.id,formData,config);
+
+    },
+
   }
 }
 </script>

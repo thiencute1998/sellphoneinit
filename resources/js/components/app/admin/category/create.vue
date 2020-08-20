@@ -9,7 +9,6 @@
               </div>
               <div class="col-lg-7" style="padding-bottom:120px">
                   <form @submit.prevent="createCategory" method="POST" enctype="multipart/form-data">
-
                       <div class="form-group">
                           <label>Tên thể loại</label>
                           <input class="form-control" v-model="ten" placeholder="Nhập tên thể loại" />
@@ -22,15 +21,7 @@
                           <label>Ghi chú</label>
                           <input class="form-control" v-model="ghichu" placeholder="Nhập ghi chú" />
                       </div>
-                      <div class="form-group">
-                          <label>Trạng thái</label>
-                          <label class="radio-inline">
-                              <input v-model="rdoTrangThai" value="1" checked="" type="radio">Còn
-                          </label>
-                          <label class="radio-inline">
-                              <input v-model="rdoTrangThai" value="0" type="radio">Hết
-                          </label>
-                      </div>
+
                       <button type="submit" class="btn btn-success">Thêm</button>
                       <button type="reset" class="btn btn-default">Làm mới</button>
                   </form>
@@ -47,10 +38,10 @@
 export default {
   data(){
     return {
-      ten : '',
-      hinhanh : '',
-      ghichu : '',
-      rdoTrangThai : '',
+        ten : '',
+        ghichu : '',
+        hinhanh : '',
+
     }
   },
   created(){
@@ -61,27 +52,28 @@ export default {
   },
   methods : {
     fileChange(e){
-      console.log(e.target.files[0]);
       this.hinhanh = e.target.files[0];
     },
     createCategory(){
-
-      let currentObj = this;
+      this.$Progress.start();
       const config = {
           headers: { 'content-type': 'multipart/form-data' }
       }
-      let formData = new FormData();
+      var formData = new FormData();
       formData.append('file', this.hinhanh);
       formData.append('ten',this.ten);
       formData.append('ghichu',this.ghichu);
-      axios.post('http://127.0.0.1:8000/api/admin/category/create',formData,config)
-      .then(response=>{
-        console.log(response.data);
-      this.$router.push('/admin/category/list');
-      })
-      .catch(e=>{
-        console.log(e);
-      })
+      var _this = this;
+      this.$store.dispatch('cate/createCate',formData,config).then(result=>{
+          setTimeout(function(){
+              _this.$Progress.finish();
+              _this.$router.push('/admin/category/list');
+          }, 1000);
+      }).catch(e=>{
+          console.log("Error happened : "+e);
+      });
+
+
     }
   }
 }

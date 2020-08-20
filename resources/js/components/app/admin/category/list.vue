@@ -20,7 +20,6 @@
                 </tr>
             </thead>
             <tbody>
-
                 <tr v-for="(item,index) in categories" :key="index" class="odd gradeX" align="center">
                     <td>{{index+1}}</td>
                     <td>{{item.Ten}}</td>
@@ -49,38 +48,55 @@
 </template>
 
 <script>
+
+
 export default {
   data(){
     return{
-        categories : [],
+
     }
   },
   created(){
-    this.loadCategories();
+    this.$Progress.start();
+    this.$store.dispatch('cate/fetchCates');
+
+    this.$Progress.finish();
+
+  },
+  computed: {
+    categories(){
+      return this.$store.state.cate.categories;
+    }
+  },
+  mounted(){
+
   },
   methods: {
-    loadCategories(){
-      axios.get('http://127.0.0.1:8000/api/admin/category/list')
-      .then(response=>{
-          console.log(response.data);
-          this.categories = response.data;
-          this.$Progress.finish();
-      })
-    },
     getImage(img){
       return "upload/theloai/" + img;
     },
     deleteCategory(id){
-      axios.delete('http://127.0.0.1:8000/api/admin/category/'+id+'/delete')
-      .then(response=>{
-        console.log(response.data);
-        let index = this.categories.map(cate=>cate.id).indexOf(id);
-        this.categories.splice(index,1);
-
-      })
-      .catch(e=>{
-        alert("Error happened : "+e);
-      })
+      // axios.delete('http://127.0.0.1:8000/api/admin/category/'+id+'/delete')
+      // .then(response=>{
+      //   console.log(response.data);
+      //   let index = this.categories.map(cate=>cate.id).indexOf(id);
+      //   this.categories.splice(index,1);
+      //
+      // })
+      // .catch(e=>{
+      //   alert("Error happened : "+e);
+      // })
+        var _this = this;
+        this.$Progress.start();
+        this.$store.dispatch('cate/deleteCate',id).then(result=>{
+            setTimeout(function () {
+                _this.$Progress.finish();
+                alert("Delete successed!!!");
+            },1000)
+        }).catch(e=>{
+            alert("Error happened : "+e);
+            _this.$Progress.finish();
+        })
     }
   }
 

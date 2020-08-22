@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+//use App\Http\Resources\User as UserResource;
 
 class UserController extends Controller
 {
@@ -157,20 +158,21 @@ class UserController extends Controller
 
     public function checkLogin(Request $request){
 
-        $this->validate($request,[
-            'username'=>'required',
-            'pass'=>'required|min:3|max:32'
-        ],[
-            'username.required'=>'Bạn chưa nhập Email',
-            'pass.required'=>'Bạn chưa nhập Password',
-            'pass.min'=>'Password không được nhỏ hơn 3 kí tự',
-            'pass.max'=>'Passwordư không được quá 32 kí tự'
-        ]);
+//        $this->validate($request,[
+//            'username'=>'required',
+//            'pass'=>'required|min:3|max:32'
+//        ],[
+//            'username.required'=>'Bạn chưa nhập Email',
+//            'pass.required'=>'Bạn chưa nhập Password',
+//            'pass.min'=>'Password không được nhỏ hơn 3 kí tự',
+//            'pass.max'=>'Passwordư không được quá 32 kí tự'
+//        ]);
 
         if (Auth::attempt(['email' => $request->username, 'password' => $request->pass])) {
             if(Auth::check())
             {
               if(Auth::user()->quyen == 1)
+//                    return UserResource(Auth::user());
                     return response()->json('admin');
               else {
                   return response()->json('');

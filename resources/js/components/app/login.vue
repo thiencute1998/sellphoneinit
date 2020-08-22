@@ -44,6 +44,7 @@
 </template>
 
 <script>
+    // import { mapActions } from 'vuex';
 export default {
   data(){
     return {
@@ -52,6 +53,7 @@ export default {
     }
   },
   mounted() {
+
       const plugin = document.createElement("script");
       plugin.setAttribute(
         "src",
@@ -61,18 +63,37 @@ export default {
       document.body.appendChild(plugin);
     },
     methods:{
+      // ...mapActions('userStore',['hasLogin']),
       checkLogin(){
         this.$Progress.start();
-        axios.post('http://127.0.0.1:8000/api/checkLogin',{username : this.username,pass : this.pass})
-        .then(response=>{
-          console.log(response.data);
-          this.$router.push('/'+response.data);
-          this.$Progress.finish();
-        })
-        .catch(e=>{
-          this.$Progress.fail();
-          alert("Failed : "+e);
-        })
+        var currentQuery = this.$route.query.redirect;
+          console.log(this.$router.currentRoute.path);
+          console.log(currentQuery);
+        var user = {
+            email : this.username,
+            password : this.pass
+        };
+          var _this = this;
+          this.$store.dispatch('userStore/hasLogin',user).then(result=>{
+              if (typeof currentQuery !== 'undefined') {
+                  console.log(111);
+                  _this.$router.push(currentQuery);
+
+
+              }
+              else{
+                  console.log(222);
+                  _this.$router.push('/admin');
+
+              }
+                  // _this.$router.push('/admin');
+
+              _this.$Progress.finish();
+          }).catch(e=>{
+              _this.$Progress.finish();
+              alert("Wrong email or password : "+e);
+
+          })
       }
     }
 }

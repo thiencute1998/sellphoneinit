@@ -22,11 +22,12 @@
                 <ul class="dropdown-menu dropdown-user">
 
                     <li><i class="fa fa-user fa-fw"></i>
+                        {{ userLogin.name }}
                     </li>
                     <li><a href="#"><i class="fa fa-gear fa-fw"></i>Đổi mật khẩu</a>
                     </li>
                     <li class="divider"></li>
-                    <li><a href="admin/logout"><i class="fa fa-sign-out fa-fw"></i>-Đăng xuất-</a>
+                    <li><a @click="logoutNow()"><i class="fa fa-sign-out fa-fw"></i>-Đăng xuất-</a>
                     </li>
 
                 </ul>
@@ -175,8 +176,34 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
 export default {
+    data() {
+        return{
 
+        }
+    },
+    computed:{
+        ...mapState('userStore',['userLogin']),
+    },
+    methods:{
+        logoutNow(){
+            this.$Progress.start();
+            var currentUrl = this.$router.currentRoute.path;
+            console.log(currentUrl);
+            var _this = this;
+            this.$store.dispatch('userStore/hasLogout').then(result=>{
+                console.log(result);
+                _this.$router.push({path : '/login',query : {redirect : currentUrl}});
+                _this.$Progress.finish();
+            }).catch(e=>{
+                _this.$Progress.finish();
+                alert("Something is wrong : "+e);
+
+            })
+
+        }
+    }
 }
 </script>
 

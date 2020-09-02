@@ -52,50 +52,42 @@
                         <!-- /input-group -->
                     </li>
                     <li>
-                        <router-link :to="{ name: 'admin_root', params: {} }"><i class="fa fa-dashboard fa-fw"></i> Dashboard</router-link>
+                        <router-link :to="{ name: 'admin-index', params: {} }"><i class="fa fa-dashboard fa-fw"></i>Dashboard</router-link>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-cube fa-fw"></i>Hóa đơn<span class="fa arrow"></span></a>
+                        <a><i class="fa fa-cube fa-fw"></i>Phân quyền<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="admin/hoadon/danhsach">Danh sách</a>
+<!--                                <router-link tag="a" :to="{ name: 'role', params: {} }" >Chức vụ</router-link>-->
+                            </li>
+                            <li>
+<!--                                <router-link tag="a" :to="{ name: 'permission_detail', params: {} }" >Quyền</router-link>-->
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
                     <li>
-                        <a><i class="fa fa-bar-chart-o fa-fw"></i>Thể loại<span class="fa arrow"></span></a>
+                        <router-link tag="a" :to="{ name: 'admin-category', params: {} }" >Thể loại</router-link>
+                    </li>
+                    <li>
+                        <a><i class="fa fa-bar-chart-o fa-fw"></i>Thương hiệu<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                              <router-link tag="a" :to="{ name: 'list_category', params: {} }" >Danh sách</router-link>
+                                <a>Danh sách</a>
                             </li>
                             <li>
-                                  <router-link tag="a" :to="{ name: 'create_category', params: {} }">Thêm</router-link>
+                                <a>Thêm</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
                     <li>
-                        <a href="admin/theloai/danhsach"><i class="fa fa-bar-chart-o fa-fw"></i>Thương hiệu<span class="fa arrow"></span></a>
+                        <a><i class="fa fa-bar-chart-o fa-fw"></i>Test<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="admin/thuonghieu/danhsach">Danh sách</a>
+<!--                                <router-link tag="a" :to="{ name: 'permission', params: {} }">Test not found</router-link>-->
                             </li>
-                            <li>
-                                <a href="admin/thuonghieu/them">Thêm</a>
-                            </li>
-                        </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
-                    <li>
-                        <a href="admin/mausacsanpham/danhsach"><i class="fa fa-bar-chart-o fa-fw"></i>Màu sắc sản phẩm<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="admin/mausacsanpham/danhsach">Danh sách</a>
-                            </li>
-                            <li>
-                                <a href="admin/mausacsanpham/them">Thêm</a>
-                            </li>
+
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
@@ -193,13 +185,11 @@ export default {
             console.log(currentUrl);
             var _this = this;
             this.$store.dispatch('userStore/hasLogout').then(result=>{
-                console.log(result);
-                _this.$router.push({path : '/login',query : {redirect : currentUrl}});
+                _this.$router.push({path : '/admin/login',query : {redirect : currentUrl}});
                 _this.$Progress.finish();
             }).catch(e=>{
                 _this.$Progress.finish();
                 alert("Something is wrong : "+e);
-
             })
 
         }

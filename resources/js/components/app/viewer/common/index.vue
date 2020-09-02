@@ -1,10 +1,7 @@
 <template>
   <div class="toang">
-
-
     <!--slider area start-->
         <section class="slider_section slider_s_two mb-50">
-
             <div class="slider_area owl-carousel">
                 <div class="single_slider d-flex align-items-center" data-bgimg="asset/assets/img/slider/slider2.jpg">
                     <div class="container">
@@ -20,10 +17,8 @@
                    </div>
                 </div>
             </div>
-
         </section>
         <!--slider area end-->
-
         <!--banner area start-->
         <div class="banner_area mb-45">
             <div class="container">

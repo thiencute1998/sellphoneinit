@@ -1,13 +1,13 @@
 <template>
   <div class="limiter">
-
     <div class="container-login100" style="background-image: url('log/images/img-01.jpg');">
       <div class="wrap-login100 p-t-190 p-b-30">
         <form class="" @submit.prevent="checkLogin()" method="post">
           <div class="login100-form-avatar">
             <img src="log/images/avatar-01.jpg" alt="AVATAR">
           </div>
-          <span class="login100-form-title p-t-20 p-b-45">
+            <div class="error-login" v-if="error_email_password">Email hoặc mật khẩu không chính xác</div>
+            <span class="login100-form-title p-t-20 p-b-45">
                     </span>
           <div class="wrap-input100 validate-input m-b-10" >
             <input class="input100" type="text" v-model="username" placeholder="Email">
@@ -50,6 +50,7 @@ export default {
     return {
         username : 'admin@gmail.com',
         pass : '123',
+        error_email_password : false,
     }
   },
   mounted() {
@@ -67,31 +68,30 @@ export default {
       checkLogin(){
         this.$Progress.start();
         var currentQuery = this.$route.query.redirect;
-          console.log(this.$router.currentRoute.path);
-          console.log(currentQuery);
         var user = {
             email : this.username,
             password : this.pass
         };
           var _this = this;
           this.$store.dispatch('userStore/hasLogin',user).then(result=>{
+              if(typeof result.error !== 'undefined'){
+                  this.error_email_password = true;
+                  _this.$Progress.finish();
+                  console.log(result.error);
+                  return;
+              }
               if (typeof currentQuery !== 'undefined') {
-                  console.log(111);
+                  this.error_email_password = false;
                   _this.$router.push(currentQuery);
-
-
               }
               else{
-                  console.log(222);
+                  this.error_email_password = false;
                   _this.$router.push('/admin');
-
               }
-                  // _this.$router.push('/admin');
-
               _this.$Progress.finish();
           }).catch(e=>{
-              _this.$Progress.finish();
-              alert("Wrong email or password : "+e);
+                alert('Login failed')
+              // console.log(e);
 
           })
       }
@@ -107,4 +107,8 @@ export default {
 @import "../../../asset/log/vendor/css-hamburgers/hamburgers.min.css";
 @import "../../../asset/log/css/util.scss";
 @import "../../../asset/log/css/main.css";
+
+    .error-login{
+        color:red;
+    }
 </style>

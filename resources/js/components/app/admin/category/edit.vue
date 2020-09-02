@@ -1,29 +1,40 @@
 <template>
   <div id="page-wrapper">
-      <div class="container-fluid">
-          <div class="row">
-              <div class="col-lg-12">
-                  <h1 class="page-header">Thể loại
-                      <small>Sửa</small>
-                  </h1>
-              </div>
-              <div class="col-lg-7" style="padding-bottom:120px">
-                  <form @submit.prevent="editCategory" enctype="multipart/form-data">
-                      <div class="form-group">
-                          <label>Tên thể loại</label>
-                          <input class="form-control" v-model="getCate.Ten" placeholder="Nhập tên thể loại" />
-                      </div>
-                      <div class="form-group">
-                          <label>Chon hình ảnh</label>
-                          <input type="file" @change="fileChange" class="form-control" />
-                      </div>
-                      <div class="form-group">
-                          <label>Ghi chú</label>
-                          <input class="form-control" v-model="getCate.ghichu" placeholder="Nhập ghi chú" />
-                      </div>
-                      <button type="submit" class="btn btn-success">Sửa</button>
-                      <button type="reset" class="btn btn-default">Làm mới</button>
-                  </form>
+      <div class="modal fade" id="editCate">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                      <h4 class="modal-title">Sửa</h4>
+                      <button type="button" class="close" data-dismiss="modal" @click="closeEditCate()">&times;</button>
+                  </div>
+
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                      <form @submit.prevent="editCategory" enctype="multipart/form-data">
+                          <div class="form-group">
+                              <label>Tên thể loại</label>
+                              <input class="form-control" v-model="getCate.Ten" placeholder="Nhập tên thể loại" />
+                          </div>
+                          <div class="form-group">
+                              <label>Chon hình ảnh</label>
+                              <input type="file" @change="fileChange" class="form-control" />
+                          </div>
+                          <div class="form-group">
+                              <label>Ghi chú</label>
+                              <input class="form-control" v-model="getCate.ghichu" placeholder="Nhập ghi chú" />
+                          </div>
+                          <button type="submit" class="btn btn-success">Sửa</button>
+
+                      </form>
+                  </div>
+
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="closeEditCate()">Close</button>
+                  </div>
+
               </div>
           </div>
       </div>
@@ -36,9 +47,11 @@ import { mapState } from 'vuex';
 import { mapGetters } from 'vuex';
 import { mapActions } from 'vuex';
 export default {
+    props : ['showEditCate'],
   data(){
     return {
       hinhanh : '',
+        showEdit : this.showEditCate,
     }
   },
   beforeCreate(){
@@ -46,13 +59,12 @@ export default {
     this.$Progress.start();
   },
   created(){
-    var idCate = this.$route.params.id;
+    var idCate = 1;
     this.$store.dispatch('cate/findCate',idCate);
 
   },
   computed: {
     ...mapGetters('cate',['getCate']),
-
   },
   mounted(){
     this.$Progress.finish();
@@ -71,7 +83,7 @@ export default {
       formData.append('file', this.hinhanh);
       formData.append('ten',this.getCate.Ten);
       formData.append('ghichu',this.getCate.ghichu);
-        var idCate = this.$route.params.id;
+        var idCate = 1;
         var _this = this;
       this.$store.dispatch('cate/editCate',{
           idCate : idCate,
@@ -88,6 +100,10 @@ export default {
         // this.editCate(this.$route.params.id,formData,config);
 
     },
+      closeEditCate : function(){
+        this.showEdit = false;
+        this.$emit('closeEditForm',this.showEdit);
+      }
 
   }
 }

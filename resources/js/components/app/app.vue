@@ -1,10 +1,11 @@
 <template>
-
   <div class="container-hihi">
     <vue-progress-bar></vue-progress-bar>
-    <router-view name="login-hihi"></router-view>
-    <router-view name="admin-hihi"></router-view>
-    <router-view name="viewer-hihi"></router-view>
+<!--    <router-view name="login-hihi"></router-view>-->
+<!--    <router-view name="admin-hihi"></router-view>-->
+<!--    <router-view name="viewer-hihi"></router-view>-->
+<!--    <router-view name="error-hihi"></router-view>-->
+        <router-view></router-view>
   </div>
 </template>
 

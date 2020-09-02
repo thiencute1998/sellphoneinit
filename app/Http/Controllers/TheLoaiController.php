@@ -9,10 +9,9 @@ use App\SanPham;
 class TheLoaiController extends Controller
 {
     public function getList(){
-    	$theloai= TheLoai::all();
+    	$theloai= TheLoai::orderBy('id','DESC')->paginate(5);
       return response()->json($theloai);
     }
-
     public function getThem(){
     	return view('admin.theloai.them');
     }

@@ -4,7 +4,7 @@ Vue.use(Vuex);
 const cateStore = {
   namespaced : true,
   state : {
-    categories : [],
+    categories : {},
     findCates : [],
     findCate : {},
   },
@@ -23,23 +23,55 @@ const cateStore = {
     FETCH_FIND_CATE_BYID(state,cate){
       state.findCate = cate;
     },
+      ADD_CATE_TO_LIST(state,cate){
+        state.categories.data.unshift(cate);
+      },
+      ADD_REMOVE_CATE_TO_LIST(state,cate){
+          state.categories.data.unshift(cate);
+          state.categories.data.pop();
+      },
   },
   actions : {
-    fetchCates(context){
-      axios.get('http://127.0.0.1:8000/api/admin/category/list')
-      .then(response=>{
-          context.commit('FETCH_CATES',response.data);
-      })
-    },
-    createCate({},formData,config){
-      axios.post('http://127.0.0.1:8000/api/admin/category/create',formData,config)
-      .then(response=>{
-      }).catch(e=>{
+    fetchCates(context,page){
+        return new Promise((res,rej) =>{
+            axios.get('http://127.0.0.1:8000/api/admin/category/list?page='+page)
+                .then(response=>{
+                    context.commit('FETCH_CATES',response.data);
+                    res(response.data);
 
-      })
+                }).catch(e=>{
+                rej(e);
+            })
+        })
+        // axios.get('http://127.0.0.1:8000/api/admin/category/list?page='+page)
+        //         .then(response=>{
+        //             context.commit('FETCH_CATES',response.data);
+        //         }).catch(e=>{
+        //
+        //     })
+    },
+    createCate({ commit },focus){
+        return new Promise((res,rej) =>{
+            axios.post('http://127.0.0.1:8000/api/admin/category/create',focus.formData,focus.config)
+                .then(response=>{
+                    if(focus.lengthCate == 5){
+                        commit('ADD_REMOVE_CATE_TO_LIST',response.data);
+                        this.dispatch('cate/fetchCates');
+                    }
+                    else{
+                        commit('ADD_CATE_TO_LIST',response.data);
+                        this.dispatch('cate/fetchCates');
+                    }
+
+                    res(response.data);
+                }).catch(e=>{
+                    rej(e);
+            })
+        })
+
     },
     editCate({},focus){
-        console.log(focus);
+
       axios.post('http://127.0.0.1:8000/api/admin/category/'+focus.idCate+'/edit',focus.formData,focus.config)
           .then(response=>{
               return 1;
@@ -52,7 +84,7 @@ const cateStore = {
       axios.get('http://127.0.0.1:8000/api/admin/category/'+idCate+'/find')
       .then(response=>{
         commit('FETCH_FIND_CATE_BYID',response.data);
-        console.log("Data "+response.data.Ten);
+
 
       })
     },

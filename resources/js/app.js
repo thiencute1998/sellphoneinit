@@ -12,11 +12,14 @@ import { routes } from './route/routes';
 import AppLogin from './components/app/app';
 import BootstrapVue from 'bootstrap-vue';
 import VueProgressBar from 'vue-progressbar';
+import Vuelidate from 'vuelidate';
 import { store } from './store/store';
 
 window.Vue.use(VueRouter);
 window.Vue.use(BootstrapVue);
 window.Vue.use(Vuex);
+window.Vue.use(Vuelidate);
+Vue.component('pagination', require('laravel-vue-pagination'));
 
 const options = {
   color: 'red',
@@ -42,6 +45,6 @@ router.beforeEach((to, from, next) => {
  const app = new Vue({
      el: '#app',
      router: router,
-     render: h => h(AppLogin),
+     // render: h => h(AppLogin),
      store : store
  });

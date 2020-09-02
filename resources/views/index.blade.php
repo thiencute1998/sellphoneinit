@@ -6,10 +6,16 @@
   	<meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Toang</title>
+      <style type="text/css">
+          body{
+              overflow: scroll !important;
+          }
+      </style>
   </head>
   <body>
     <div id="app">
-
+        <vue-progress-bar></vue-progress-bar>
+        <router-view></router-view>
     </div>
     <script src="{{ mix('js/app.js') }}"></script>
     <script src="admin_asset/bower_components/jquery/dist/jquery.min.js"></script>
@@ -22,6 +28,8 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="admin_asset/dist/js/sb-admin-2.js"></script>
+
+{{--    <script src="vuelidate/dist/vuelidate.min.js"></script>--}}
 
     <!-- DataTables JavaScript -->
     <script src="admin_asset/bower_components/DataTables/media/js/jquery.dataTables.min.js"></script>

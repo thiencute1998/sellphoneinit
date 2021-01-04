@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <router-view name="header-admin"></router-view>
+   <router-view name="header-admin"></router-view>
     <router-view></router-view>
     <router-view name="footer-admin"></router-view>
   </div>
